@@ -34,6 +34,12 @@
     index_var: idx
   when: deb_check.results[idx].rc != 0
 
+- name: Fix missing dependencies
+  ansible.builtin.command:
+    cmd: apt-get install -f -y
+  register: fix_deps
+  changed_when: fix_deps.stdout is search('newly installed')
+
 - name: Clean up temp directory
   ansible.builtin.file:
     path: "{{ deb_temp_dir.path }}"
