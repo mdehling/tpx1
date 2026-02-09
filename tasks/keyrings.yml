@@ -7,9 +7,9 @@
 
 - name: Download and install GPG keys (armored)
   ansible.builtin.shell: |
-    curl -fsSL "{{ item.key_url }}" | gpg --dearmor -o "/etc/apt/keyrings/{{ item.name }}.gpg"
+    curl -fsSL "{{ item.key_url }}" | gpg --dearmor -o "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
   args:
-    creates: "/etc/apt/keyrings/{{ item.name }}.gpg"
+    creates: "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
   loop: "{{ repositories }}"
   loop_control:
     label: "{{ item.name }}"
@@ -18,7 +18,7 @@
 - name: Download GPG keys (binary)
   ansible.builtin.get_url:
     url: "{{ item.key_url }}"
-    dest: "/etc/apt/keyrings/{{ item.name }}.gpg"
+    dest: "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
     mode: "0644"
   loop: "{{ repositories }}"
   loop_control:
@@ -27,7 +27,7 @@
 
 - name: Set permissions on keyring files
   ansible.builtin.file:
-    path: "/etc/apt/keyrings/{{ item.name }}.gpg"
+    path: "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
     mode: "0644"
   loop: "{{ repositories }}"
   loop_control:

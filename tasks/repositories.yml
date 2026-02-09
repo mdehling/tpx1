@@ -9,7 +9,7 @@
       Suites: {{ item.suite }}
       Components: {{ item.components }}
       Architectures: {{ item.arch }}
-      Signed-By: /etc/apt/keyrings/{{ item.name }}.gpg
+      Signed-By: /etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg
   loop: "{{ repositories }}"
   loop_control:
     label: "{{ item.name }}"

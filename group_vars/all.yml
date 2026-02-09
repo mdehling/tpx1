@@ -26,7 +26,8 @@ apt_packages:
 
 # External repositories with GPG keys
 repositories:
-  - name: google-chrome
+  - name: chrome
+    key_name: google
     key_url: https://dl.google.com/linux/linux_signing_key.pub
     repo_type: deb
     url: https://dl.google.com/linux/chrome/deb/
@@ -35,6 +36,7 @@ repositories:
     arch: amd64
 
   - name: github-cli
+    key_name: githubcli-archive-keyring
     key_url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
     key_armored: false
     repo_type: deb
@@ -52,6 +54,7 @@ repositories:
     arch: amd64
 
   - name: vscode
+    key_name: microsoft
     key_url: https://packages.microsoft.com/keys/microsoft.asc
     repo_type: deb
     url: https://packages.microsoft.com/repos/code
