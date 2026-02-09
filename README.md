@@ -15,7 +15,7 @@ This will:
 2. Clone this repository and run the playbook
 3. Add external apt repositories (Chrome, GitHub CLI, Node.js, VS Code)
 4. Install all development packages
-5. Install Webex
+5. Install Webex and Horizon VDI Client
 6. Apply audio fixes for Lunar Lake (newer kernel, SOF firmware, PipeWire
    buffer workaround)
 
@@ -39,6 +39,7 @@ This will:
 ### Direct Downloads
 
 - Webex
+- Horizon VDI Client (with libxml2 compatibility workaround for 25.10)
 
 ### Audio Fixes
 
