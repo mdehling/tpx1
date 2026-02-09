@@ -5,7 +5,9 @@
   ansible.builtin.copy:
     dest: /etc/apt/sources.list.d/resolute.list
     mode: "0644"
-    content: "deb http://archive.ubuntu.com/ubuntu/ resolute main restricted\n"
+    content: |
+      deb http://archive.ubuntu.com/ubuntu/ resolute main restricted
+      deb http://archive.ubuntu.com/ubuntu/ resolute-updates main restricted
   register: resolute_repo_added
 
 - name: Pin resolute repository to prevent full OS upgrade
