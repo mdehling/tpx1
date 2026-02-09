@@ -1,0 +1,24 @@
+---
+- name: ThinkPad X1 Developer Setup
+  hosts: localhost
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Import keyring tasks
+      ansible.builtin.import_tasks: tasks/keyrings.yml
+
+    - name: Import repository tasks
+      ansible.builtin.import_tasks: tasks/repositories.yml
+
+    - name: Import package tasks
+      ansible.builtin.import_tasks: tasks/packages.yml
+
+    - name: Import deb installation tasks
+      ansible.builtin.import_tasks: tasks/debs.yml
+
+    - name: Import audio fix tasks
+      ansible.builtin.import_tasks: tasks/audio.yml
+
+    - name: Import configuration tasks
+      ansible.builtin.import_tasks: tasks/config.yml

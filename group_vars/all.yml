@@ -1,0 +1,77 @@
+---
+# Standard apt packages to install
+apt_packages:
+  # Python
+  - python3
+  - python3-venv
+  - python3-pip
+  - python-is-python3
+  - python3-dev
+  # Editors and tools
+  - neovim
+  - tmux
+  - git
+  # Build tools
+  - cmake
+  - ninja-build
+  - ccache
+  # LLVM toolchain
+  - lld
+  - lldb
+  - clang
+  # System utilities
+  - curl
+  - gpg
+  - build-essential
+
+# External repositories with GPG keys
+repositories:
+  - name: google-chrome
+    key_url: https://dl.google.com/linux/linux_signing_key.pub
+    repo_type: deb
+    url: https://dl.google.com/linux/chrome/deb/
+    suite: stable
+    components: main
+    arch: amd64
+
+  - name: github-cli
+    key_url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    key_armored: false
+    repo_type: deb
+    url: https://cli.github.com/packages
+    suite: stable
+    components: main
+    arch: amd64
+
+  - name: nodesource
+    key_url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+    repo_type: deb
+    url: https://deb.nodesource.com/node_22.x
+    suite: nodistro
+    components: main
+    arch: amd64
+
+  - name: vscode
+    key_url: https://packages.microsoft.com/keys/microsoft.asc
+    repo_type: deb
+    url: https://packages.microsoft.com/repos/code
+    suite: stable
+    components: main
+    arch: amd64,arm64,armhf
+
+# Packages to install from external repositories
+external_packages:
+  - google-chrome-stable
+  - gh
+  - nodejs
+  - code
+
+# Direct .deb file downloads
+deb_packages:
+  - name: webex
+    url: https://binaries.webex.com/WebexDesktop-Ubuntu-Official-Package/Webex.deb
+
+# Post-install commands
+post_install_commands:
+  - name: Enable corepack
+    command: corepack enable

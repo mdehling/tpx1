@@ -1,0 +1,28 @@
+---
+- name: Create temp directory for deb downloads
+  ansible.builtin.tempfile:
+    state: directory
+    prefix: deb_packages_
+  register: deb_temp_dir
+
+- name: Download .deb packages
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ deb_temp_dir.path }}/{{ item.name }}.deb"
+    mode: "0644"
+  loop: "{{ deb_packages }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Install .deb packages
+  ansible.builtin.apt:
+    deb: "{{ deb_temp_dir.path }}/{{ item.name }}.deb"
+    state: present
+  loop: "{{ deb_packages }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Clean up temp directory
+  ansible.builtin.file:
+    path: "{{ deb_temp_dir.path }}"
+    state: absent

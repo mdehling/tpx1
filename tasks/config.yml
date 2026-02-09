@@ -1,0 +1,8 @@
+---
+- name: Run post-install commands
+  ansible.builtin.command:
+    cmd: "{{ item.command }}"
+  loop: "{{ post_install_commands }}"
+  loop_control:
+    label: "{{ item.name }}"
+  changed_when: false

@@ -1,0 +1,21 @@
+---
+- name: Add apt repositories
+  ansible.builtin.copy:
+    dest: "/etc/apt/sources.list.d/{{ item.name }}.sources"
+    mode: "0644"
+    content: |
+      Types: {{ item.repo_type }}
+      URIs: {{ item.url }}
+      Suites: {{ item.suite }}
+      Components: {{ item.components }}
+      Architectures: {{ item.arch }}
+      Signed-By: /etc/apt/keyrings/{{ item.name }}.gpg
+  loop: "{{ repositories }}"
+  loop_control:
+    label: "{{ item.name }}"
+  register: repos_added
+
+- name: Update apt cache after adding repositories
+  ansible.builtin.apt:
+    update_cache: true
+  when: repos_added.changed

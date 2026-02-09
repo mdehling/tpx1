@@ -1,0 +1,51 @@
+---
+# Audio fixes for ThinkPad X1 Carbon Gen 13 (Lunar Lake)
+
+- name: Add resolute (26.04) repository for newer kernel
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/resolute.list
+    mode: "0644"
+    content: "deb http://archive.ubuntu.com/ubuntu/ resolute main restricted\n"
+  register: resolute_repo_added
+
+- name: Pin resolute repository to prevent full OS upgrade
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/resolute-pin
+    mode: "0644"
+    content: |
+      Package: *
+      Pin: release n=resolute
+      Pin-Priority: 1
+
+- name: Update apt cache after adding resolute repository
+  ansible.builtin.apt:
+    update_cache: true
+  when: resolute_repo_added.changed
+
+- name: Install kernel from resolute repository
+  ansible.builtin.apt:
+    name:
+      - linux-image-generic
+      - linux-headers-generic
+    state: present
+    default_release: resolute
+
+- name: Install SOF firmware from local .deb
+  ansible.builtin.apt:
+    deb: "{{ playbook_dir }}/packages/firmware-sof-signed_2025.12.2-1_all.deb"
+    state: present
+
+- name: Create system-wide PipeWire config directory
+  ansible.builtin.file:
+    path: /etc/pipewire/pipewire.conf.d
+    state: directory
+    mode: "0755"
+
+- name: Apply SoundWire buffer underflow workaround
+  ansible.builtin.copy:
+    dest: /etc/pipewire/pipewire.conf.d/99-lunar-lake-audio-fix.conf
+    mode: "0644"
+    content: |
+      context.properties = {
+          default.clock.min-quantum = 1024
+      }
