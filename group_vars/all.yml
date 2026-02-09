@@ -70,6 +70,8 @@ external_packages:
 deb_packages:
   - name: webex
     url: https://binaries.webex.com/WebexDesktop-Ubuntu-Official-Package/Webex.deb
+  - name: omnissa-horizon-client
+    url: https://download3.omnissa.com/software/CART26FQ4_LIN64_DEBPKG_2512/Omnissa-Horizon-Client-2512-8.17.0-20187591429.x64.deb
 
 # Post-install commands
 post_install_commands:

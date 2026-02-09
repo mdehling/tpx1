@@ -6,3 +6,9 @@
   loop_control:
     label: "{{ item.name }}"
   changed_when: false
+
+- name: Create libxml2.so.2 symlink for Omnissa Horizon Client
+  ansible.builtin.file:
+    src: libxml2.so.16
+    dest: /usr/lib/x86_64-linux-gnu/libxml2.so.2
+    state: link
