@@ -16,10 +16,8 @@
   register: deb_temp_dir
 
 - name: Download missing .deb packages
-  ansible.builtin.get_url:
-    url: "{{ item.url }}"
-    dest: "{{ deb_temp_dir.path }}/{{ item.name }}.deb"
-    mode: "0644"
+  ansible.builtin.command:
+    cmd: "curl -fsSL -o {{ deb_temp_dir.path }}/{{ item.name }}.deb {{ item.url }}"
   loop: "{{ deb_packages }}"
   loop_control:
     label: "{{ item.name }}"

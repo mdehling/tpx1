@@ -5,7 +5,7 @@
     state: directory
     mode: "0755"
 
-- name: Download and install GPG keys (armored)
+- name: Download and dearmor GPG keys
   ansible.builtin.shell: |
     curl -fsSL "{{ item.key_url }}" | gpg --dearmor -o "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
   args:
@@ -15,11 +15,11 @@
     label: "{{ item.name }}"
   when: item.key_armored | default(true)
 
-- name: Download GPG keys (binary)
-  ansible.builtin.get_url:
-    url: "{{ item.key_url }}"
-    dest: "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
-    mode: "0644"
+- name: Download binary GPG keys
+  ansible.builtin.shell: |
+    curl -fsSL -o "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg" "{{ item.key_url }}"
+  args:
+    creates: "/etc/apt/keyrings/{{ item.key_name | default(item.name) }}.gpg"
   loop: "{{ repositories }}"
   loop_control:
     label: "{{ item.name }}"
