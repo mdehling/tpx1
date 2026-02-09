@@ -2,10 +2,10 @@
 - name: Run post-install commands
   ansible.builtin.command:
     cmd: "{{ item.command }}"
+    creates: "{{ item.creates | default(omit) }}"
   loop: "{{ post_install_commands }}"
   loop_control:
     label: "{{ item.name }}"
-  changed_when: false
 
 - name: Create libxml2.so.2 symlink for Omnissa Horizon Client
   ansible.builtin.file:

@@ -77,3 +77,4 @@ deb_packages:
 post_install_commands:
   - name: Enable corepack
     command: corepack enable
+    creates: /usr/bin/yarn

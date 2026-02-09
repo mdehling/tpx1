@@ -1,11 +1,21 @@
 ---
+- name: Check which .deb packages are already installed
+  ansible.builtin.command:
+    cmd: "dpkg -s {{ item.name }}"
+  loop: "{{ deb_packages }}"
+  loop_control:
+    label: "{{ item.name }}"
+  register: deb_check
+  failed_when: false
+  changed_when: false
+
 - name: Create temp directory for deb downloads
   ansible.builtin.tempfile:
     state: directory
     prefix: deb_packages_
   register: deb_temp_dir
 
-- name: Download .deb packages
+- name: Download missing .deb packages
   ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "{{ deb_temp_dir.path }}/{{ item.name }}.deb"
@@ -13,14 +23,18 @@
   loop: "{{ deb_packages }}"
   loop_control:
     label: "{{ item.name }}"
+    index_var: idx
+  when: deb_check.results[idx].rc != 0
 
-- name: Install .deb packages
+- name: Install missing .deb packages
   ansible.builtin.apt:
     deb: "{{ deb_temp_dir.path }}/{{ item.name }}.deb"
     state: present
   loop: "{{ deb_packages }}"
   loop_control:
     label: "{{ item.name }}"
+    index_var: idx
+  when: deb_check.results[idx].rc != 0
 
 - name: Clean up temp directory
   ansible.builtin.file:
