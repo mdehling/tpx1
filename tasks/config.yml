@@ -1,4 +1,12 @@
 ---
+- name: Install CA certificates environment setup
+  ansible.builtin.copy:
+    src: ca-certificates-env.sh
+    dest: /etc/profile.d/ca-certificates-env.sh
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Run post-install commands
   ansible.builtin.command:
     cmd: "{{ item.command }}"
