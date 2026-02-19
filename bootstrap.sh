@@ -40,6 +40,7 @@ apt-get install -y -qq ansible git-lfs
 
 # Run ansible-pull
 log_info "Running Ansible playbook from ${REPO_URL}..."
-ansible-pull -U "${REPO_URL}" -i inventory.yml "${PLAYBOOK}"
+ANSIBLE_HOST_PATTERN_MISMATCH=ignore \
+    ansible-pull -U "${REPO_URL}" -i inventory.yml "${PLAYBOOK}"
 
 log_info "Setup complete!"
